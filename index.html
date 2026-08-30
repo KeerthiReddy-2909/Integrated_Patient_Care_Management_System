@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediTrack | Integrated Patient Care</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">Integrated Patient Care Management System</p>
+      <h1>MediTrack</h1>
+      <p class="subtitle">Patient Care, Consultations and Prescription Management</p>
+    </div>
+    <div class="header-actions">
+      <button class="secondary-btn" id="loadDemoBtn" type="button">Load Demo</button>
+      <button class="danger-btn" id="clearDataBtn" type="button">Clear Data</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <nav class="tabs" aria-label="Main sections">
+      <button class="tab-btn active" data-tab="dashboard" type="button">Dashboard</button>
+      <button class="tab-btn" data-tab="registration" type="button">Registration</button>
+      <button class="tab-btn" data-tab="profiles" type="button">Profiles</button>
+      <button class="tab-btn" data-tab="appointments" type="button">Appointments</button>
+      <button class="tab-btn" data-tab="consultations" type="button">Consultations</button>
+      <button class="tab-btn" data-tab="prescriptions" type="button">Prescriptions</button>
+      <button class="tab-btn" data-tab="records" type="button">Records</button>
+    </nav>
+
+    <section class="tab-panel active" id="dashboard">
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span>Total Patients</span>
+          <strong id="patientCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Completed Profiles</span>
+          <strong id="profileCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Booked Appointments</span>
+          <strong id="appointmentCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Next Patient ID</span>
+          <strong id="nextPatientId">PAT001</strong>
+        </article>
+        <article class="stat-card">
+          <span>Consultations</span>
+          <strong id="consultationCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Prescriptions</span>
+          <strong id="prescriptionCount">0</strong>
+        </article>
+      </div>
+
+      <div class="workflow-panel">
+        <h2>Milestone 2 Workflow</h2>
+        <ol class="workflow">
+          <li>Patient Registration</li>
+          <li>Patient Information Stored in Database</li>
+          <li>Patient Profile Created</li>
+          <li>Appointment Booked</li>
+          <li>Doctor Views Patient Record</li>
+          <li>Patient Consultation</li>
+          <li>Prescription Generated</li>
+        </ol>
+      </div>
+
+      <div class="data-table-panel">
+        <div class="panel-heading">
+          <h2>Recent Appointments</h2>
+          <span id="slotNote">Booked slots are blocked automatically.</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentAppointments"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="consultations">
+      <form class="form-grid" id="consultationForm">
+        <div class="section-title">
+          <h2>Start Consultation</h2>
+          <p>Record the patient's symptoms, diagnosis and treatment after a clinical consultation.</p>
+        </div>
+        <label>Patient <select name="patientId" id="consultationPatientSelect" required></select></label>
+        <label>Doctor <select name="doctor" class="doctor-options" required></select></label>
+        <label class="full-width">Symptoms <textarea name="symptoms" rows="3" required placeholder="Describe the patient's symptoms"></textarea></label>
+        <label class="full-width">Diagnosis <textarea name="diagnosis" rows="3" required placeholder="Clinical diagnosis"></textarea></label>
+        <label class="full-width">Treatment <textarea name="treatment" rows="3" required placeholder="Recommended treatment or care plan"></textarea></label>
+        <div class="form-actions full-width"><button class="primary-btn" type="submit">Save Consultation</button></div>
+      </form>
+      <div class="data-table-panel">
+        <div class="panel-heading"><h2>Consultation History</h2><input id="consultationSearch" type="search" placeholder="Search patient, doctor or diagnosis"></div>
+        <div class="table-wrap"><table><thead><tr><th>Patient</th><th>Doctor</th><th>Symptoms</th><th>Diagnosis</th><th>Treatment</th><th>Date</th></tr></thead><tbody id="consultationTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="prescriptions">
+      <form class="form-grid" id="prescriptionForm">
+        <div class="section-title">
+          <h2>Generate Prescription</h2>
+          <p>Create a medication prescription for a registered patient.</p>
+        </div>
+        <label>Patient <select name="patientId" id="prescriptionPatientSelect" required></select></label>
+        <label>Doctor <select name="doctor" class="doctor-options" required></select></label>
+        <label>Medicine <input name="medicine" type="text" required placeholder="Medicine name"></label>
+        <label>Dosage <input name="dosage" type="text" required placeholder="e.g. 500 mg twice daily"></label>
+        <label class="full-width">Duration <input name="duration" type="text" required placeholder="e.g. 5 days"></label>
+        <div class="form-actions full-width"><button class="primary-btn" type="submit">Generate Prescription</button></div>
+      </form>
+      <div class="data-table-panel">
+        <div class="panel-heading"><h2>Prescription History</h2><input id="prescriptionSearch" type="search" placeholder="Search patient, doctor or medicine"></div>
+        <div class="table-wrap"><table><thead><tr><th>Patient</th><th>Doctor</th><th>Medicine</th><th>Dosage</th><th>Duration</th><th>Date</th></tr></thead><tbody id="prescriptionTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="registration">
+      <form class="form-grid" id="registrationForm">
+        <div class="section-title">
+          <h2>Patient Registration</h2>
+          <p>Collect basic patient information and assign a unique Patient ID.</p>
+        </div>
+
+        <label>
+          Patient ID
+          <input id="patientId" name="patientId" type="text" readonly>
+        </label>
+        <label>
+          Full Name
+          <input name="fullName" type="text" autocomplete="name" required>
+        </label>
+        <label>
+          Age
+          <input name="age" type="number" min="0" max="120" required>
+        </label>
+        <label>
+          Gender
+          <select name="gender" required>
+            <option value="">Select gender</option>
+            <option>Female</option>
+            <option>Male</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>
+          Date of Birth
+          <input name="dob" type="date" required>
+        </label>
+        <label>
+          Phone Number
+          <input name="phone" type="tel" minlength="10" maxlength="15" required>
+        </label>
+        <label>
+          Email Address
+          <input name="email" type="email" required>
+        </label>
+        <label class="full-width">
+          Residential Address
+          <textarea name="address" rows="3" required></textarea>
+        </label>
+        <div class="form-actions full-width">
+          <button class="primary-btn" type="submit">Register Patient</button>
+        </div>
+      </form>
+
+      <div class="data-table-panel">
+        <div class="panel-heading">
+          <h2>Patient Table</h2>
+          <input id="patientSearch" type="search" placeholder="Search by ID, name or phone">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody id="patientTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="profiles">
+      <form class="form-grid" id="profileForm">
+        <div class="section-title">
+          <h2>Patient Profile Management</h2>
+          <p>Store medical information that doctors use during diagnosis and treatment.</p>
+        </div>
+
+        <label>
+          Patient
+          <select name="patientId" id="profilePatientSelect" required></select>
+        </label>
+        <label>
+          Blood Group
+          <select name="bloodGroup" required>
+            <option value="">Select blood group</option>
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>B-</option>
+            <option>AB+</option>
+            <option>AB-</option>
+            <option>O+</option>
+            <option>O-</option>
+          </select>
+        </label>
+        <label>
+          Allergies
+          <input name="allergies" type="text" placeholder="None, Penicillin, Peanuts">
+        </label>
+        <label>
+          Existing Diseases
+          <input name="existingDiseases" type="text" placeholder="Diabetes, Asthma">
+        </label>
+        <label class="full-width">
+          Previous Medical History
+          <textarea name="medicalHistory" rows="3"></textarea>
+        </label>
+        <label>
+          Current Medications
+          <input name="currentMedications" type="text">
+        </label>
+        <label>
+          Emergency Contact
+          <input name="emergencyContact" type="text" required>
+        </label>
+        <label class="full-width">
+          Insurance Details
+          <textarea name="insuranceDetails" rows="3"></textarea>
+        </label>
+        <div class="form-actions full-width">
+          <button class="primary-btn" type="submit">Save Profile</button>
+        </div>
+      </form>
+
+      <div class="cards-grid" id="profileCards"></div>
+    </section>
+
+    <section class="tab-panel" id="appointments">
+      <form class="form-grid" id="appointmentForm">
+        <div class="section-title">
+          <h2>Appointment Scheduling</h2>
+          <p>Select a patient, doctor, date and available time slot.</p>
+        </div>
+
+        <label>
+          Patient
+          <select name="patientId" id="appointmentPatientSelect" required></select>
+        </label>
+        <label>
+          Doctor
+          <select name="doctor" id="doctorSelect" required>
+            <option value="">Select doctor</option>
+            <option>Dr. Priya - General Medicine</option>
+            <option>Dr. Mehta - Cardiology</option>
+            <option>Dr. Sharma - Orthopedics</option>
+            <option>Dr. Rao - Pediatrics</option>
+          </select>
+        </label>
+        <label>
+          Date
+          <input name="date" id="appointmentDate" type="date" required>
+        </label>
+        <label>
+          Available Time Slot
+          <select name="time" id="timeSlotSelect" required></select>
+        </label>
+        <div class="slot-board full-width" id="slotBoard"></div>
+        <div class="form-actions full-width">
+          <button class="primary-btn" type="submit">Confirm Appointment</button>
+        </div>
+      </form>
+
+      <div class="data-table-panel">
+        <div class="panel-heading">
+          <h2>Appointment History</h2>
+          <input id="appointmentSearch" type="search" placeholder="Search patient, doctor or date">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="appointmentTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="records">
+      <div class="records-layout">
+        <aside class="record-search">
+          <h2>Retrieve Information</h2>
+          <input id="recordSearch" type="search" placeholder="Search patient ID, name, phone or email">
+          <div id="recordList" class="record-list"></div>
+        </aside>
+        <article class="record-detail" id="recordDetail">
+          <h2>Select a patient record</h2>
+          <p>Doctors and hospital staff can retrieve registration, profile and appointment information from here.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="meditrack.js"></script>
+  <script src="integration.js"></script>
+</body>
+</html>

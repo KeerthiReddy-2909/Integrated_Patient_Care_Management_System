@@ -1,0 +1,12 @@
+{
+  "name": "meditrack-care-management",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MediTrack integrated patient care backend",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test:health": "node -e \"fetch('http://localhost:3000/api/health').then(r=>r.json()).then(console.log)\""
+  },
+  "engines": { "node": ">=24" }
+}
